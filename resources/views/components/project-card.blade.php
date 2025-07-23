@@ -9,7 +9,7 @@
             :media="$project->getFirstMedia('gallery')"
             :alt="'Imagen del proyecto ' . $project->title"
             class="h-full w-full object-cover"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 1023px) 100vw, 33vw"
         />
     </div>
 
