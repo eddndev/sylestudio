@@ -1,0 +1,39 @@
+{
+    "$schema": "https://json.schemastore.org/package.json",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "vite build",
+        "dev": "vite"
+    },
+    "devDependencies": {
+        "@alpinejs/collapse": "^3.14.9",
+        "@alpinejs/sort": "^3.14.9",
+        "@tailwindcss/forms": "^0.5.10",
+        "@tailwindcss/postcss": "^4.1.10",
+        "@tailwindcss/vite": "^4.0.0",
+        "alpinejs": "^3.14.9",
+        "autoprefixer": "^10.4.2",
+        "axios": "^1.8.2",
+        "concurrently": "^9.0.1",
+        "filepond": "^4.32.8",
+        "filepond-plugin-file-validate-size": "^2.2.8",
+        "filepond-plugin-file-validate-type": "^1.2.9",
+        "filepond-plugin-image-exif-orientation": "^1.0.11",
+        "filepond-plugin-image-preview": "^4.6.12",
+        "laravel-echo": "^2.1.6",
+        "laravel-vite-plugin": "^1.2.0",
+        "postcss": "^8.5.5",
+        "pusher-js": "^8.4.0",
+        "sharp": "^0.34.2",
+        "sortablejs": "^1.15.6",
+        "tailwindcss": "^4.1.10",
+        "vite": "^6.2.4",
+        "vite-imagetools": "^7.1.0"
+    },
+    "dependencies": {
+        "@alpinejs/anchor": "^3.14.9",
+        "gsap": "^3.13.0",
+        "slugify": "^1.6.6"
+    }
+}

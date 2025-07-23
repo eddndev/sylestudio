@@ -1,0 +1,33 @@
+Claro, aquí tienes una guía de referencia rápida para cambiar una imagen usando el sistema que hemos configurado.
+
+-----
+
+### \#\# Pasos para Reemplazar una Imagen
+
+Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por ejemplo, cambiar `hero.jpg` por una nueva versión).
+
+1.  **Reemplaza el Archivo Fuente**
+    En tu computadora, ve a la carpeta `resources/images/` y sobrescribe el archivo de imagen antiguo con el nuevo. Asegúrate de que el **nombre del archivo no cambie**.
+
+2.  **Actualiza el Registro en la Base de Datos**
+    Abre tu terminal en la raíz del proyecto y ejecuta `php artisan tinker`. Dentro de la consola de Tinker, usa los siguientes comandos, reemplazando `'resources/images/hero.jpg'` por la ruta de la imagen que estás cambiando.
+
+    ```php
+    // Encuentra el registro del asset
+    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/hero.jpg')->first();
+
+    // Elimina los archivos viejos (original y conversiones)
+    $asset->clearMediaCollection();
+
+    // Adjunta el nuevo archivo y genera las nuevas conversiones
+    $asset->addMedia(resource_path('images/hero.jpg'))->toMediaCollection();
+    ```
+
+3.  **Limpia el Caché**
+    Para asegurar que los cambios se vean inmediatamente en tu sitio, sal de Tinker (`exit`) y ejecuta el siguiente comando en tu terminal:
+
+    ```bash
+    php artisan cache:clear
+    ```
+
+Este proceso garantiza que la imagen se actualice correctamente, se regeneren todas sus versiones optimizadas y no queden archivos huérfanos en tu servidor.

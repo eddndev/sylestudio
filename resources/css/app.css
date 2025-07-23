@@ -1,0 +1,203 @@
+@import 'tailwindcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@theme{
+    --color-primary:            #000;
+    --color-on-primary:         #fff;
+    --color-surface:            #fff;
+    --color-on-surface:         #000;
+    --color-surface-variant:    #f4f4f5;
+    --color-outline:            #080809;
+    --color-outline-variant:    #323030;
+    --color-inverseSurface:     #000;
+    --color-inverseOnSurface:   #fff;
+}
+
+#preview-colors{
+    --color-primary: #000;
+    --color-on-primary: #fff;
+    --color-surface: #fff;
+    --color-on-surface: #000;
+    --color-surface-variant: #f4f4f5;
+    --color-outline: #080809;
+    --color-outline-variant: #323030;
+    --color-inverseSurface: #000;
+    --color-inverseOnSurface: #fff;
+}
+
+/*  Estado normal vs. scrolled (prefijo específico para evitar colisiones) */
+#mainNav            { @apply bg-transparent text-on-primary; }
+#mainNav.nav--scrolled {
+  @apply bg-white text-on-surface shadow-sm border-b border-outline;
+  will-change: transform;
+  transform: translateZ(0); /* mejora suavidad en móviles */
+}
+
+/* resources/css/app.css */
+.logo--white,
+.logo--black {
+  @apply transition-opacity duration-300;
+}
+.logo{
+    @apply max-w-[100px];
+}
+.logo--black { @apply opacity-0; }
+.nav--scrolled .logo--white { @apply opacity-0; }
+.nav--scrolled .logo--black { @apply opacity-100; }
+
+.category-card   { @apply bg-black text-white; }       /* texto blanco encima */
+.card-label      { @apply absolute top-4 left-4 md:left-6; }
+
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2
+            px-6 py-3 font-semibold uppercase tracking-wider
+            transition-colors duration-300 relative overflow-hidden;
+    will-change: background-color, border-color, color;
+    cursor: pointer;
+}
+
+@layer components {
+
+    /* =================================================================
+       BOTÓN PRIMARIO
+       ================================================================= */
+    .btn-primary {
+        @apply btn bg-black text-white border border-outline;
+    }
+
+    /* ---------- Destello ---------- */
+    .btn-primary::after {
+        content: '';
+        @apply absolute inset-y-0 -left-[150%] w-1/2;
+        background: linear-gradient(120deg,
+            transparent 0%,
+            rgba(255, 255, 255, .35) 50%,
+            transparent 100%);
+        transform: skewX(-25deg);
+        opacity: 0;
+    }
+
+    /* ---------- Interacción Primario ---------- */
+    .btn-primary:hover {
+        @apply bg-outline-variant border-outline-variant; /* gris final */
+    }
+
+    .btn-primary:hover::after {
+        animation: shine .4s forwards;
+    }
+
+    .btn-primary:focus-visible {
+        @apply ring-2 ring-offset-2 ring-outline-variant;
+    }
+    
+    .btn-primary-disabled {
+        @apply btn bg-gray-300 text-gray-500 border border-gray-300 cursor-not-allowed;
+    }
+
+
+    /* =================================================================
+       BOTÓN SECUNDARIO
+       ================================================================= */
+    .btn-secondary {
+        @apply btn bg-transparent text-on-surface border border-outline;
+    }
+
+    /* ---------- Interacción Secundario ---------- */
+    .btn-secondary:hover {
+        /* Al pasar el cursor, el fondo se rellena con el color del borde */
+        @apply bg-outline text-on-primary;
+    }
+
+    .btn-secondary:focus-visible {
+        @apply ring-2 ring-offset-2 ring-outline;
+    }
+
+    .btn-secondary-disabled {
+        @apply btn bg-transparent text-gray-400 border border-gray-300 cursor-not-allowed;
+    }
+}
+
+/* ---------- keyframes ---------- */
+@keyframes shine {
+  0%   { left:-150%; opacity:0; }
+  100% { left:150%;  opacity:1; }
+}
+
+@layer components {
+  /* Linea under-style común para inputs */
+  input[type="text"], input[type="email"], input[type="password"] {
+    @apply bg-transparent border-b border-outline focus:ring-0 focus:border-on-surface
+           placeholder:text-on-surface/60 transition-colors duration-300;
+  }
+
+  .dark input[type="text"], .dark input[type="email"], .dark input[type="password"],
+  .bg-gray-900 input[type="email"] {          /* onblack = bool */
+    @apply border-outline-variant text-on-primary placeholder:text-on-primary/60
+           focus:border-on-primary;
+  }
+}
+
+
+@layer utilities {
+  .footer-link {
+    @apply transition-colors duration-200 hover:text-white text-on-primary/80;
+  }
+}
+
+/* resources/css/partials/_components.css  (o donde tengas tus utilidades) */
+@layer components {
+  .icon-btn {
+    @apply inline-flex items-center justify-center h-6 w-6 leading-none;
+  }
+
+  .icon-btn > svg {
+    @apply block h-full w-full;
+  }
+}
+.icon-wrapper {
+    @apply relative inline-flex items-center leading-none;
+  }
+
+  
+@layer components {
+    .category-tree {
+        @apply relative pl-6; /* Añadimos padding para dar espacio a la línea */
+    }
+
+    /* Línea vertical: La hacemos un poco más visible y la posicionamos en el nuevo padding */
+    .category-tree::before {
+        content: '';
+        @apply absolute top-0 left-3 w-px h-full bg-outline-variant/60; /* left-3 ahora es correcto por el padding */
+    }
+
+    .category-tree-item {
+        @apply relative;
+    }
+    
+    /* Línea horizontal CONECTORA (Corregida) */
+    .category-tree-item::before {
+        content: '';
+        @apply absolute top-[1.1rem] -left-3 w-3 h-px bg-outline-variant/60; /* La movemos a la izquierda del padding */
+    }
+
+    /* Opcional: Eliminar la línea del último elemento para un look más limpio */
+    .category-tree > .category-tree-item:last-child > ul::before {
+       height: 1.1rem;
+    }
+}
+
+@layer components {
+    /* Estilo base para celdas de tabla en el admin */
+    .admin-table th, .admin-table td {
+        @apply px-4 py-2 text-left;
+    }
+
+    /* Input limpio para usar dentro de las tablas */
+    .table-input {
+        @apply w-full p-0 bg-transparent border-0 border-b border-transparent 
+               focus:border-outline focus:ring-0 transition-colors duration-200;
+    }
+}
