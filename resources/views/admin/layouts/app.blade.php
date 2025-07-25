@@ -6,6 +6,13 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title', 'Admin') | {{ config('app.name') }}</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+
+    <!-- Claro -->
+    <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" sizes="any">
+
+    <!-- Oscuro -->
+    <link rel="icon" href="/favicon-dark.ico"  media="(prefers-color-scheme: dark)"  sizes="any">
     <script>
         window.routes = {
             store   : @json(route('admin.categories.store')),

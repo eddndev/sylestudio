@@ -7,6 +7,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Sylestudio') }}</title>
+    <link rel="icon" href="/favicon.ico" sizes="any">
+
+    <!-- Claro -->
+    <link rel="icon" href="/favicon-light.ico" media="(prefers-color-scheme: light)" sizes="any">
+
+    <!-- Oscuro -->
+    <link rel="icon" href="/favicon-dark.ico"  media="(prefers-color-scheme: dark)"  sizes="any">
+
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
