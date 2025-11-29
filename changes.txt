@@ -1,7 +1,3 @@
-Claro, aquí tienes una guía de referencia rápida para cambiar una imagen usando el sistema que hemos configurado.
-
------
-
 ### \#\# Pasos para Reemplazar una Imagen
 
 Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por ejemplo, cambiar `hero.jpg` por una nueva versión).
