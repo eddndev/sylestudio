@@ -16,7 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // 4. Obtenemos la URL de la API desde un atributo de datos que añadiremos en la vista Blade.
     const galleryUrl = galleryContainer.dataset.galleryUrl;
     if (!galleryUrl) {
-        console.error('No se encontró la URL de la galería (data-gallery-url).');
+        // Puede pasar si el proyecto no está guardado aún o no tiene galería asignada.
+        console.warn('Galería detectada pero sin URL de datos. Omitiendo carga.');
+        if(loader) loader.style.display = 'none';
         return;
     }
 
@@ -53,7 +55,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     <img src="${image.src_fallback}" alt="${image.alt}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
                 `;
                 
-                picture.querySelector('img').onload = e => e.target.classList.remove('opacity-0');
+                // CORRECCIÓN: Verificar si la imagen ya cargó (caché) para evitar que se quede invisible
+                const img = picture.querySelector('img');
+                const reveal = () => img.classList.remove('opacity-0');
+
+                if (img.complete) {
+                    reveal();
+                } else {
+                    img.addEventListener('load', reveal);
+                    img.addEventListener('error', () => console.warn('Error cargando imagen:', image.src_fallback));
+                }
 
                 placeholder.appendChild(picture);
                 link.appendChild(placeholder);
