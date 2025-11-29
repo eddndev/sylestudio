@@ -3,7 +3,7 @@ name: Deploy to Hostgator (Production)
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
@@ -58,7 +58,7 @@ jobs:
             $PHP_BIN artisan down || true
 
             # 2. Descargar código (Git Pull)
-            git pull origin main
+            git pull origin master
 
             # 3. Instalar dependencias
             # Usamos $PHP_BIN delante de $COMPOSER_BIN para asegurar que Composer
