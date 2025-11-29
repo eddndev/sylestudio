@@ -57,7 +57,8 @@ jobs:
             # 1. Poner en mantenimiento
             $PHP_BIN artisan down || true
 
-            # 2. Descargar código (Git Pull)
+            # 2. Descartar cambios locales y descargar código
+            git reset --hard HEAD
             git pull origin master
 
             # 3. Instalar dependencias
