@@ -2,6 +2,7 @@
     'key',
     'alt' => '',
     'class' => '',
+    'imgClass' => '',
     'loading' => 'lazy',
     'widths' => [400, 800, 1600],
     'formats' => ['avif', 'webp'],
@@ -31,7 +32,7 @@
             <img
                 src="{{ $fallbackSrc }}"
                 alt="{{ $alt }}"
-                class="w-full h-full object-cover"
+                class="w-full h-full object-cover {{ $imgClass }}"
                 width="{{ $maxWidth }}"
                 height="{{ round($maxWidth / (16/9)) }}"
                 loading="{{ $loading }}"
@@ -48,7 +49,7 @@
         <img
             src="{{ $fallbackSrc }}"
             alt="{{ $alt }}"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover {{ $imgClass }}"
             width="{{ $maxWidth }}"
             height="{{ round($maxWidth / (16/9)) }}"
             loading="{{ $loading }}"

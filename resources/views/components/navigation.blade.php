@@ -2,8 +2,6 @@
     $links = [
         ['label' => 'INICIO',    'route' => route('home')],
         ['label' => 'NOSOTROS',  'route' => route('about')],
-        // ✅ CORRECCIÓN: Se actualiza el nombre de la ruta de 'projects' a 'projects.index'
-        // para coincidir con la nueva estructura de rutas agrupadas.
         ['label' => 'PROYECTOS', 'route' => route('projects.index')],
     ];
 @endphp

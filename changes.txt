@@ -1,4 +1,35 @@
-### \#\# Pasos para Reemplazar una Imagen
+## Pasos para Crear un Nuevo Asset de Imagen
+
+Sigue este proceso para añadir una nueva imagen al sistema (por ejemplo, añadir `tienda.jpg`).
+
+1.  **Coloca el Archivo en la Carpeta de Recursos**
+    Copia tu imagen a la carpeta `resources/images/` con el nombre que desees.
+
+2.  **Crea el Registro en la Base de Datos**
+    Abre tu terminal en la raíz del proyecto y ejecuta `php artisan tinker`. Dentro de la consola de Tinker, usa los siguientes comandos:
+
+    ```php
+    // Crear el registro del asset
+    $asset = App\Models\SiteAsset::create([
+        'original_path' => 'resources/images/sylen.png'
+    ]);
+
+    // Adjuntar el archivo y generar las conversiones (AVIF, WebP, JPG)
+    $asset->addMedia(resource_path('images/sylen.png'))->preservingOriginal()->toMediaCollection();
+    ```
+
+3.  **Limpia el Caché**
+    Sal de Tinker (`exit`) y ejecuta:
+
+    ```bash
+    php artisan cache:clear
+    ```
+
+Ahora puedes usar la imagen en tus vistas con `get_image('resources/images/tienda.jpg')`.
+
+---
+
+## Pasos para Reemplazar una Imagen
 
 Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por ejemplo, cambiar `hero.jpg` por una nueva versión).
  
@@ -10,13 +41,13 @@ Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por e
 
     ```php
     // Encuentra el registro del asset
-    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/hero.jpg')->first();
+    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/syleb.png')->first();
 
     // Elimina los archivos viejos (original y conversiones)
     $asset->clearMediaCollection();
 
     // Adjunta el nuevo archivo y genera las nuevas conversiones
-    $asset->addMedia(resource_path('images/hero.jpg'))->toMediaCollection();
+    $asset->addMedia(resource_path('images/syleb.png'))->toMediaCollection();
     ```
 
 3.  **Limpia el Caché**

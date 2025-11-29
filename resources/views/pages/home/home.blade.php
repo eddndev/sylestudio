@@ -29,10 +29,9 @@
             sizes="100vw">
 
         <img
-            {{-- CORRECCIÓN 1: Usar el helper para la imagen de fallback --}}
             src="{{ get_image('resources/images/hero.jpg') }}"
             alt="Modelo vistiendo Sylestudio"
-            class="w-full h-full object-cover"
+            class="w-full h-full object-cover object-top"
             width="1600"
             height="900"
             loading="eager"
@@ -40,15 +39,14 @@
     </picture>
 
     {{-- 3. Overlay + contenido --}}
-    <div class="absolute inset-0 bg-black/40"></div>
+    <div class="absolute inset-0"></div>
 </section>
 
 <section id="categories" class="grid grid-cols-1 md:grid-cols-2 gap-1 p-1">
-    {{-- CORRECCIÓN 2: Añadir la extensión .jpg a las rutas base --}}
     <x-category-card slug="about-us"    title="NOSOTROS"     sub="CONÓCENOS"   src-base="resources/images/about.jpg" />
-    <x-category-card slug="coming-soon"     title="PROXIMAMENTE"      sub="????"  src-base="resources/images/coming1.jpg" />
+    <x-category-card slug="coming-soon"     title="TIENDA"      sub="PRÓXIMAMENTE"  src-base="resources/images/tienda.jpg" />
     <x-category-card slug="projects" title="PROYECTOS" sub="NUESTROS PROYECTOS" src-base="resources/images/projects.jpg" />
-    <x-category-card slug="coming-soon"     title="?????"       sub=""  src-base="resources/images/coming2.jpg" />
+    <x-category-card slug="coming-soon"     title="NUEVO: SIMBOLO VIVO"       sub=""  src-base="resources/images/coming2.jpg" />
 </section>
 
 @include('sections.join')

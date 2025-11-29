@@ -24,8 +24,19 @@
 
         {{-- 1. Logo + misión --}}
         <div class="space-y-4">
-            <div class="flex items-center space-x-4">
-                <span class="text-2xl font-semibold">{{ config('app.name') }}</span>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('home') }}">
+                    <picture>
+                        <source type="image/avif" srcset="{{ get_image('resources/images/syleb.png', ['w' => 800, 'format' => 'avif']) }}">
+                        <source type="image/webp" srcset="{{ get_image('resources/images/syleb.png', ['w' => 800, 'format' => 'webp']) }}">
+                        <img
+                            src="{{ get_image('resources/images/syleb.png', ['w' => 800, 'format' => 'webp']) }}"
+                            alt="Syle Studio"
+                            class="h-5 md:h-6 w-auto"
+                            loading="lazy"
+                        >
+                    </picture>
+                </a>
                 <x-nav-logo class="h-6 md:h-8" href="{{ route('home') }}"/>
             </div>
             <p class="text-sm max-w-xs">

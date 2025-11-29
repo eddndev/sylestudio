@@ -48,12 +48,13 @@
 
 @section('content')
 {{-- HERO ------------------------------------------------------------------}}
-<section class="relative h-[90vh] lg:h-screen overflow-hidden" id="about">
+<section class="relative h-[100vh] lg:h-screen overflow-hidden" id="about">
     
-    <x-responsive-image 
-        key="hero.jpg" 
+    <x-responsive-image
+        key="nosotros.jpg"
         alt="Syle Studio – Sobre Nosotros"
-        class="absolute inset-0 w-full h-full"
+        class="absolute w-full h-full"
+        img-class="object-top"
         loading="eager"
     />
 
