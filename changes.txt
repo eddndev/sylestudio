@@ -11,11 +11,11 @@ Sigue este proceso para añadir una nueva imagen al sistema (por ejemplo, añadi
     ```php
     // Crear el registro del asset
     $asset = App\Models\SiteAsset::create([
-        'original_path' => 'resources/images/Logo_SyleStudio_Syle_B.png'
+        'original_path' => 'resources/images/syleb.png'
     ]);
 
     // Adjuntar el archivo y generar las conversiones (AVIF, WebP, JPG)
-    $asset->addMedia(resource_path('images/Logo_SyleStudio_Syle_B.png'))->preservingOriginal()->toMediaCollection();
+    $asset->addMedia(resource_path('images/syleb.png'))->preservingOriginal()->toMediaCollection();
     ```
 
 3.  **Limpia el Caché**
@@ -41,13 +41,13 @@ Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por e
 
     ```php
     // Encuentra el registro del asset
-    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/projects.jpg')->first();
+    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/tienda.jpg')->first();
 
     // Elimina los archivos viejos (original y conversiones)
     $asset->clearMediaCollection();
 
     // Adjunta el nuevo archivo y genera las nuevas conversiones
-    $asset->addMedia(resource_path('images/projects.jpg'))->toMediaCollection();
+    $asset->addMedia(resource_path('images/tienda.jpg'))->preservingOriginal()->toMediaCollection();
     ```
 
 3.  **Limpia el Caché**
