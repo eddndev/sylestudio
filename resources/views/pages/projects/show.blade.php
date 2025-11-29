@@ -15,9 +15,10 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Staatliches&family=Gloria+Hallelujah&family=Covered+By+Your+Grace&family=Special+Elite&family=Anton&family=Oswald&family=Rubik+Mono+One&display=swap" rel="stylesheet">
-        
-        {{-- Imagen principal del Hero --}}
-        <link rel="preload" as="image" href="{{ $heroImage->getUrl('gallery-xl-webp') }}" fetchpriority="high">
+
+        {{-- Preload de imagen hero con múltiples formatos --}}
+        <link rel="preload" as="image" href="{{ $heroImage->getUrl('gallery-xl-webp') }}" type="image/webp" fetchpriority="high">
+        <link rel="preload" as="image" href="{{ $heroImage->getUrl('gallery-xl-avif') }}" type="image/avif" fetchpriority="high">
     @endpush
 @endif
 
@@ -95,10 +96,13 @@
                 </mask>
             </defs>
             @if ($heroImage)
-                <image href="{{ $heroImage->getUrl('gallery-xl-webp') }}"
+                {{-- Imagen principal con fallback --}}
+                <image id="hero-svg-image"
+                       href="{{ $heroImage->getUrl('gallery-xl-webp') }}"
                        x="0" y="0" width="1920" height="1080"
                        preserveAspectRatio="xMidYMid slice"
-                       mask="url(#sprayMask)"/>
+                       mask="url(#sprayMask)"
+                       onerror="this.href.baseVal='{{ $heroImage->getUrl() }}'"/>
             @endif
         </svg>
 
@@ -341,7 +345,14 @@ document.addEventListener('DOMContentLoaded', () => {
           <img src="${img.src_fallback}" alt="${img.alt}" loading="lazy" decoding="async"
                class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
         `;
-        picture.querySelector('img').onload = e => e.target.classList.remove('opacity-0');
+        const imgEl = picture.querySelector('img');
+        imgEl.onload = () => imgEl.classList.remove('opacity-0');
+        imgEl.onerror = () => {
+          imgEl.onerror = null;
+          imgEl.classList.remove('opacity-0');
+          imgEl.style.backgroundColor = '#e5e7eb';
+          imgEl.style.minHeight = '200px';
+        };
 
         ph.appendChild(picture);
         a.appendChild(ph);

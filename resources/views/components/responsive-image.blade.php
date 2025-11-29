@@ -1,5 +1,5 @@
 @props([
-    'key', 
+    'key',
     'alt' => '',
     'class' => '',
     'loading' => 'lazy',
@@ -17,25 +17,27 @@
 
         return [$format => $set];
     });
+
+    // URL de fallback JPG para máxima compatibilidad
+    $fallbackSrc = get_image("resources/images/{$key}");
+    $maxWidth = $widths[count($widths) - 1];
 @endphp
 
-{{-- 
-    La lógica condicional para el enlace <a> permanece igual.
---}}
 @if ($href)
     <a href="{{ $href }}" @if($target) target="{{ $target }}" @endif class="{{ $class }}">
         <picture>
             <source type="image/avif" srcset="{{ $sources['avif'] }}" sizes="100vw">
             <source type="image/webp" srcset="{{ $sources['webp'] }}" sizes="100vw">
             <img
-                src="{{ get_image("resources/images/{$key}") }}"
+                src="{{ $fallbackSrc }}"
                 alt="{{ $alt }}"
                 class="w-full h-full object-cover"
-                width="{{ $widths[count($widths) - 1] }}"
-                height="{{ $widths[count($widths) - 1] / (16/9) }}"
+                width="{{ $maxWidth }}"
+                height="{{ round($maxWidth / (16/9)) }}"
                 loading="{{ $loading }}"
                 decoding="async"
-                onerror="this.onerror=null;this.style.display='none';"
+                fetchpriority="{{ $loading === 'eager' ? 'high' : 'auto' }}"
+                onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-full h-full bg-gray-200 flex items-center justify-center\'><span class=\'text-gray-400\'>Error</span></div>';"
             >
         </picture>
     </a>
@@ -44,14 +46,15 @@
         <source type="image/avif" srcset="{{ $sources['avif'] }}" sizes="100vw">
         <source type="image/webp" srcset="{{ $sources['webp'] }}" sizes="100vw">
         <img
-            src="{{ get_image("resources/images/{$key}") }}"
+            src="{{ $fallbackSrc }}"
             alt="{{ $alt }}"
             class="w-full h-full object-cover"
-            width="{{ $widths[count($widths) - 1] }}"
-            height="{{ $widths[count($widths) - 1] / (16/9) }}"
+            width="{{ $maxWidth }}"
+            height="{{ round($maxWidth / (16/9)) }}"
             loading="{{ $loading }}"
             decoding="async"
-            onerror="this.onerror=null;this.style.display='none';"
+            fetchpriority="{{ $loading === 'eager' ? 'high' : 'auto' }}"
+            onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-full h-full bg-gray-200 flex items-center justify-center\'><span class=\'text-gray-400\'>Error</span></div>';"
         >
     </picture>
 @endif

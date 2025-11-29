@@ -22,6 +22,9 @@
         $srcsetWebp = collect($widthMap)
             ->map(fn($width, $size) => $media->getUrl('gallery-' . $size . '-webp') . ' ' . $width . 'w')
             ->implode(', ');
+
+        // Fallback src con webp de tamaño medio
+        $fallbackSrc = $media->getUrl('gallery-md-webp');
     @endphp
 
     <picture>
@@ -29,18 +32,19 @@
         <source type="image/webp" srcset="{{ $srcsetWebp }}" sizes="{{ $sizes }}">
 
         <img
-            src="{{ $media->getUrl('gallery-md-webp') }}"
+            src="{{ $fallbackSrc }}"
             alt="{{ $alt }}"
             class="{{ $class }}"
             width="{{ $media->getCustomProperty('width', '800') }}"
             height="{{ $media->getCustomProperty('height', '1200') }}"
             loading="{{ $loading }}"
             decoding="async"
-            onerror="this.onerror=null;this.src='https://placehold.co/800x1200/eee/ccc?text=Error';"
+            fetchpriority="{{ $loading === 'eager' ? 'high' : 'auto' }}"
+            onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'w-full h-full bg-gray-200 flex items-center justify-center\'><span class=\'text-gray-400\'>Error</span></div>';"
         >
     </picture>
 @else
     <div class="bg-gray-200 aspect-[2/3] flex items-center justify-center {{ $class }}">
-        <img src="https://placehold.co/800x1200/eee/ccc?text=No+Image" alt="Placeholder" class="w-full h-full object-cover">
+        <span class="text-gray-400 text-sm">Sin imagen</span>
     </div>
 @endif
