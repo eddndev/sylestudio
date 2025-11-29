@@ -1,6 +1,8 @@
 # Sylestudio
 
-[![Deploy to Production](https://github.com/tu-usuario/sylestudio/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/tu-usuario/sylestudio/actions/workflows/deploy.yml)
+<a href="https://github.com/eddndev/sylestudio/actions/workflows/deploy.yml">
+  <img src="https://img.shields.io/github/actions/workflow/status/eddndev/sylestudio/deploy.yml?branch=master&style=for-the-badge&label=DEPLOY&logo=github&logoColor=white" alt="Deploy Status">
+</a>
 
 > **Your Style. Your Strength. Your Spirit. Your Essence.**
 
