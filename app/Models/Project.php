@@ -7,8 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Sitemap\Contracts\Sitemapable;
+use Spatie\Sitemap\Tags\Url;
 
-class Project extends Model implements HasMedia
+class Project extends Model implements HasMedia, Sitemapable
 {
     use HasFactory, InteractsWithMedia;
 
@@ -33,6 +35,14 @@ class Project extends Model implements HasMedia
     protected $casts = [
         'published_at' => 'datetime',
     ];
+
+    public function toSitemapTag(): Url | string | array
+    {
+        return Url::create(route('projects.show', $this))
+            ->setLastModificationDate($this->updated_at)
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY)
+            ->setPriority(0.8);
+    }
 
     /**
      * Registra las conversiones de imagen para la galería del proyecto.

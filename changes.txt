@@ -41,13 +41,13 @@ Sigue este proceso cada vez que necesites actualizar un archivo de imagen (por e
 
     ```php
     // Encuentra el registro del asset
-    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/tienda.jpg')->first();
+    $asset = App\Models\SiteAsset::where('original_path', 'resources/images/syleb.png')->first();
 
     // Elimina los archivos viejos (original y conversiones)
     $asset->clearMediaCollection();
 
     // Adjunta el nuevo archivo y genera las nuevas conversiones
-    $asset->addMedia(resource_path('images/tienda.jpg'))->preservingOriginal()->toMediaCollection();
+    $asset->addMedia(resource_path('images/syleb.png'))->preservingOriginal()->toMediaCollection();
     ```
 
 3.  **Limpia el Caché**

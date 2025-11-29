@@ -1,10 +1,11 @@
 @import 'tailwindcss';
+@plugin "@tailwindcss/forms";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@source "../../resources";
 
-@theme{
+@theme {
+    --font-sans: "Figtree", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
     --color-primary:            #000;
     --color-on-primary:         #fff;
     --color-surface:            #fff;
@@ -16,7 +17,22 @@
     --color-inverseOnSurface:   #fff;
 }
 
+/* Safelist: Tailwind v4 detecta clases dinámicas si están completas. 
+   Si necesitas forzar clases, agrégalas en un comentario especial o usa una técnica dummy.
+   Ejemplo: force-safelist { --safelist: object-top object-bottom ... }
+*/
+
 #preview-colors{
+    --color-primary: #000;
+    --color-on-primary: #fff;
+    --color-surface: #fff;
+    --color-on-surface: #000;
+    --color-surface-variant: #f4f4f5;
+    --color-outline: #080809;
+    --color-outline-variant: #323030;
+    --color-inverseSurface: #000;
+    --color-inverseOnSurface: #fff;
+}#preview-colors{
     --color-primary: #000;
     --color-on-primary: #fff;
     --color-surface: #fff;
