@@ -24,8 +24,12 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
+    // --- INICIO DE EJECUCIÓN ---
+    setupModal();
+    buildFullGallery();
+
     // --- Lógica de Renderizado con Animación ---
-    const buildFullGallery = async () => {
+    async function buildFullGallery() {
         try {
             const response = await fetch(galleryUrl);
             if (!response.ok) throw new Error(`HTTP error!`);
@@ -96,14 +100,10 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Error al construir la galería:', error);
             if(loader) loader.innerHTML = '<p class="text-red-500">Error al cargar la galería.</p>';
         }
-    };
-
-    // --- INICIO DE EJECUCIÓN ---
-    setupModal();
-    buildFullGallery();
+    }
 
     // Re-implementar la lógica del modal aquí
-    const setupModal = () => {
+    function setupModal() {
         const modal = document.getElementById('image-modal');
         const modalImage = document.getElementById('modal-image');
         const modalCloseButton = document.getElementById('modal-close-button');
@@ -129,5 +129,5 @@ document.addEventListener('DOMContentLoaded', function () {
         modalCloseButton.addEventListener('click', closeModal);
         modal.addEventListener('click', e => e.target === modal && closeModal());
         document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
-    };
+    }
 });
