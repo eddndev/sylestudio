@@ -24,16 +24,6 @@ jobs:
           npm ci
           npm run build
 
-      - name: Upload Built Assets to Hostgator
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 2222
-          source: "public/build"
-          target: ${{ secrets.PROJECT_PATH }}
-
       - name: Deploy Backend via SSH
         uses: appleboy/ssh-action@master
         with:
@@ -85,3 +75,13 @@ jobs:
             $PHP_BIN artisan up
             
             echo "✅ ¡Despliegue Exitoso!"
+
+      - name: Upload Built Assets to Hostgator
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 2222
+          source: "public/build"
+          target: ${{ secrets.PROJECT_PATH }}
