@@ -1,5 +1,8 @@
-// 1. Importa GSAP al inicio del archivo. Ahora tienes acceso a él.
+// 1. Importa GSAP y ScrollTrigger.
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // 2. Envolvemos toda la lógica en un listener para que se ejecute cuando el DOM esté listo.
 document.addEventListener('DOMContentLoaded', function () {
@@ -13,10 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const loader = document.getElementById('gallery-loader');
     
-    // 4. Obtenemos la URL de la API desde un atributo de datos que añadiremos en la vista Blade.
+    // 4. Obtenemos la URL de la API desde un atributo de datos.
     const galleryUrl = galleryContainer.dataset.galleryUrl;
     if (!galleryUrl) {
-        // Puede pasar si el proyecto no está guardado aún o no tiene galería asignada.
         console.warn('Galería detectada pero sin URL de datos. Omitiendo carga.');
         if(loader) loader.style.display = 'none';
         return;
@@ -25,13 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Lógica de Renderizado con Animación ---
     const buildFullGallery = async () => {
         try {
-            // 5. Usamos la URL que obtuvimos del atributo de datos.
             const response = await fetch(galleryUrl);
             if (!response.ok) throw new Error(`HTTP error!`);
             const images = await response.json();
 
             if (!images || images.length === 0) {
-                loader.innerHTML = '<p class="text-on-surface/60">Esta galería no tiene imágenes.</p>';
+                if(loader) loader.innerHTML = '<p class="text-on-surface/60">Esta galería no tiene imágenes.</p>';
                 return;
             }
 
@@ -40,7 +41,8 @@ document.addEventListener('DOMContentLoaded', function () {
             images.forEach(image => {
                 const link = document.createElement('a');
                 link.href = image.src_full;
-                link.className = 'gallery-item block mb-4 opacity-0'; 
+                // Añadimos translate-y-4 para que la animación tenga desde dónde subir
+                link.className = 'gallery-item block mb-4 opacity-0 translate-y-4'; 
 
                 const placeholder = document.createElement('div');
                 placeholder.className = 'gallery-item-placeholder w-full overflow-hidden';
@@ -73,20 +75,26 @@ document.addEventListener('DOMContentLoaded', function () {
             
             galleryContainer.appendChild(fragment);
 
+            // Disparamos evento custom por si alguien escucha
             window.dispatchEvent(new CustomEvent('gallery-ready'));
             
-            // GSAP ahora funciona porque fue importado al inicio del archivo.
+            // Animación con ScrollTrigger
             gsap.to('.gallery-item', {
                 opacity: 1,
                 y: 0,
                 duration: 0.8,
-                ease: 'power3.out',
-                stagger: 0.05,
+                ease: 'power2.out',
+                stagger: 0.08,
+                scrollTrigger: {
+                    trigger: "#gallery-container",
+                    start: "top 85%", // Inicia cuando el top del contenedor está al 85% del viewport
+                    toggleActions: "play none none none"
+                }
             });
 
         } catch (error) {
             console.error('Error al construir la galería:', error);
-            loader.innerHTML = '<p class="text-red-500">Error al cargar la galería.</p>';
+            if(loader) loader.innerHTML = '<p class="text-red-500">Error al cargar la galería.</p>';
         }
     };
 

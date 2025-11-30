@@ -123,7 +123,7 @@
     {{-- 2. SECCIÓN GALERÍA (sin cambios en su estructura) --}}
     <div class="bg-surface text-on-surface">
         <div class="container mx-auto py-16 px-4">
-            <div id="gallery-container" class="columns-2 md:columns-3 gap-4"></div>
+            <div id="gallery-container" data-gallery-url="{{ route('projects.gallery', $project) }}" class="columns-2 md:columns-3 gap-4"></div>
         </div>
     </div>
 
@@ -316,98 +316,10 @@ document.addEventListener('DOMContentLoaded', () => {
     runCluster();
     }
 
-
-  // ---------- GALERÍA ----------
-  async function buildFullGallery() {
-    if (!galleryContainer) return;
-    try {
-      const res = await fetch(`{{ route('projects.gallery', $project) }}`);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const images = await res.json();
-      if (!images?.length) {
-        galleryContainer.innerHTML = '<p class="text-on-surface/60">Esta galería no tiene imágenes.</p>';
-        return;
-      }
-      const frag = document.createDocumentFragment();
-      images.forEach(img => {
-        const a  = document.createElement('a');
-        a.href   = img.src_full;
-        a.className = 'gallery-item block mb-4 opacity-0 translate-y-4';
-
-        const ph = document.createElement('div');
-        ph.className = 'gallery-item-placeholder w-full overflow-hidden';
-        if (img.height > 0) ph.style.aspectRatio = `${img.width} / ${img.height}`;
-
-        const picture = document.createElement('picture');
-        picture.innerHTML = `
-          <source type="image/avif" srcset="${img.srcset_avif}" sizes="(max-width: 768px) 50vw, 33vw">
-          <source type="image/webp" srcset="${img.srcset_webp}" sizes="(max-width: 768px) 50vw, 33vw">
-          <img src="${img.src_fallback}" alt="${img.alt}" loading="lazy" decoding="async"
-               class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
-        `;
-        const imgEl = picture.querySelector('img');
-        imgEl.onload = () => imgEl.classList.remove('opacity-0');
-        imgEl.onerror = () => {
-          imgEl.onerror = null;
-          imgEl.classList.remove('opacity-0');
-          imgEl.style.backgroundColor = '#e5e7eb';
-          imgEl.style.minHeight = '200px';
-        };
-
-        ph.appendChild(picture);
-        a.appendChild(ph);
-        frag.appendChild(a);
-      });
-      galleryContainer.appendChild(frag);
-    } catch (err) {
-      console.error('Galería:', err);
-    }
-  }
-
-  function setupGalleryAnimation() {
-    if (!galleryContainer) return;
-    gsap.to('.gallery-item', {
-      opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.08,
-      scrollTrigger: {
-        trigger: "#gallery-container",
-        start: "top 85%",
-        toggleActions: "play none none none"
-      }
-    });
-  }
-
-  // ---------- MODAL ----------
-  function setupModal() {
-    const modal = document.getElementById('image-modal');
-    if (!modal) return;
-    const modalImage = document.getElementById('modal-image');
-    const modalCloseButton = document.getElementById('modal-close-button');
-
-    const openModal = (url) => {
-      modalImage.src = url;
-      modal.classList.remove('opacity-0', 'pointer-events-none');
-      document.body.style.overflow = 'hidden';
-    };
-    const closeModal = () => {
-      modal.classList.add('opacity-0', 'pointer-events-none');
-      document.body.style.overflow = '';
-    };
-
-    galleryContainer?.addEventListener('click', e => {
-      const link = e.target.closest('a.gallery-item');
-      if (link) { e.preventDefault(); openModal(link.href); }
-    });
-    modalCloseButton.addEventListener('click', closeModal);
-    modal.addEventListener('click', e => e.target === modal && closeModal());
-    document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
-  }
-
-  // ---------- RUN ----------
+  // ---------- RUN HERO ANIMATIONS ----------
   splitTitle();
   applyInitialFonts();
   playHeroTL();
-  setupModal();
-  buildFullGallery().then(setupGalleryAnimation);
 });
 </script>
 
