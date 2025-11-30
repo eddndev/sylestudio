@@ -316,10 +316,126 @@ document.addEventListener('DOMContentLoaded', () => {
     runCluster();
     }
 
-  // ---------- RUN HERO ANIMATIONS ----------
+
+  // ---------- GALERÍA (RESTAURADA Y MEJORADA) ----------
+  async function buildFullGallery() {
+    const galleryContainer = document.getElementById('gallery-container');
+    if (!galleryContainer) return;
+
+    // Usamos la ruta directa de Blade, es más seguro que data-attributes aquí
+    const galleryUrl = "{{ route('projects.gallery', $project) }}";
+
+    try {
+      const res = await fetch(galleryUrl);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const images = await res.json();
+
+      if (!images?.length) {
+        galleryContainer.innerHTML = '<p class="text-on-surface/60">Esta galería no tiene imágenes.</p>';
+        return;
+      }
+
+      const frag = document.createDocumentFragment();
+      
+      images.forEach(img => {
+        const a  = document.createElement('a');
+        a.href   = img.src_full;
+        // translate-y-4 para la animación de entrada
+        a.className = 'gallery-item block mb-4 opacity-0 translate-y-4';
+
+        const ph = document.createElement('div');
+        ph.className = 'gallery-item-placeholder w-full overflow-hidden';
+        if (img.height > 0) ph.style.aspectRatio = `${img.width} / ${img.height}`;
+
+        const picture = document.createElement('picture');
+        picture.innerHTML = `
+          <source type="image/avif" srcset="${img.srcset_avif}" sizes="(max-width: 768px) 50vw, 33vw">
+          <source type="image/webp" srcset="${img.srcset_webp}" sizes="(max-width: 768px) 50vw, 33vw">
+          <img src="${img.src_fallback}" alt="${img.alt}" loading="lazy" decoding="async"
+               class="w-full h-full object-cover opacity-0 transition-opacity duration-500">
+        `;
+        
+        // --- FIX: Verificar carga real para evitar items invisibles ---
+        const imgEl = picture.querySelector('img');
+        const reveal = () => imgEl.classList.remove('opacity-0');
+
+        if (imgEl.complete) {
+            reveal();
+        } else {
+            imgEl.onload = reveal;
+            imgEl.onerror = () => {
+                // Fallback visual si falla la carga
+                imgEl.classList.remove('opacity-0');
+                imgEl.style.backgroundColor = '#e0e0e0'; 
+            };
+        }
+
+        ph.appendChild(picture);
+        a.appendChild(ph);
+        frag.appendChild(a);
+      });
+      
+      galleryContainer.appendChild(frag);
+
+    } catch (err) {
+      console.error('Galería:', err);
+      galleryContainer.innerHTML = '<p class="text-red-500">Error cargando galería.</p>';
+    }
+  }
+
+  function setupGalleryAnimation() {
+    if (!document.getElementById('gallery-container')) return;
+    
+    // Registramos ScrollTrigger por si acaso no está global
+    if (window.gsap && window.ScrollTrigger) {
+        gsap.registerPlugin(ScrollTrigger);
+    }
+
+    gsap.to('.gallery-item', {
+      opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.08,
+      scrollTrigger: {
+        trigger: "#gallery-container",
+        start: "top 85%",
+        toggleActions: "play none none none"
+      }
+    });
+  }
+
+  function setupModal() {
+    const modal = document.getElementById('image-modal');
+    if (!modal) return;
+    const modalImage = document.getElementById('modal-image');
+    const modalCloseButton = document.getElementById('modal-close-button');
+    const galleryContainer = document.getElementById('gallery-container');
+
+    const openModal = (url) => {
+      modalImage.src = url;
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    };
+    const closeModal = () => {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    };
+
+    galleryContainer?.addEventListener('click', e => {
+      const link = e.target.closest('a.gallery-item');
+      if (link) { e.preventDefault(); openModal(link.href); }
+    });
+    
+    if(modalCloseButton) modalCloseButton.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => e.target === modal && closeModal());
+    document.addEventListener('keydown', e => e.key === 'Escape' && closeModal());
+  }
+
+  // ---------- RUN HERO & GALLERY ----------
   splitTitle();
   applyInitialFonts();
   playHeroTL();
+  
+  // Iniciamos galería y modal
+  setupModal();
+  buildFullGallery().then(setupGalleryAnimation);
 });
 </script>
 
